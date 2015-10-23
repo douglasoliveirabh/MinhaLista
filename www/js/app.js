@@ -12,7 +12,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);      
+      cordova.plugins.Keyboard.disableScroll(true);
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
@@ -31,42 +31,43 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
     controller: 'AppCtrl'
   })
 
-  .state('app.search', {
+  /*.state('app.search', {
     url: '/search',
     views: {
       'menuContent': {
         templateUrl: 'templates/search.html'
       }
     }
-  })
+  })*/
 
-  .state('app.browse', {
+  /*.state('app.browse', {
       url: '/browse',
       views: {
         'menuContent': {
           templateUrl: 'templates/browse.html'
         }
       }
-    })
-    .state('app.playlists', {
-      url: '/playlists',
+    })*/
+
+    .state('app.listas', {
+      url: '/listas',
       views: {
         'menuContent': {
-          templateUrl: 'templates/playlists.html',
-          controller: 'PlaylistsCtrl'
+          templateUrl: 'templates/listas.html',
+          controller: 'ListasCtrl'
         }
       }
     })
 
   .state('app.single', {
-    url: '/playlists/:playlistId',
+    url: '/itenslista/:ListaId',
     views: {
       'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
+        templateUrl: 'templates/itensLista.html',
+        controller: 'ItensListaCtrl'
       }
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/listas');
 });
