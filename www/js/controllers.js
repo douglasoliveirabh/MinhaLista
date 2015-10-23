@@ -53,5 +53,5 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ItensListaCtrl', function($scope, $stateParams) {
-
+  alert($stateParams.ListaId);
 });
