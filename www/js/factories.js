@@ -1,11 +1,12 @@
 angular.module('minhalista.factories',[])
 .factory('DB', ['$q', '$cordovaSQLite', 'DB_CONFIG', function($q, $cordovaSQLite, DB_CONFIG) {
 
-    var db = null;
+    var self = this;
+    self.db = null;
 
-    var init = function() {
+    self.init = function() {
 
-        db =  window.openDatabase(DB_CONFIG.name, '1', 'database', -1);
+        self.db =  window.openDatabase(DB_CONFIG.name, '1', 'database', -1);
 
         angular.forEach(DB_CONFIG.tables, function(table) {
             var columns = [];
@@ -15,57 +16,59 @@ angular.module('minhalista.factories',[])
             var sql = 'CREATE TABLE IF NOT EXISTS ' + table.name + ' (' + columns.join(',') + ')';
             //console.log(sql);
             console.log('Table ' + table.name + ' initialized');
-            query(sql);
+            self.query(sql);
         });
 
         //query("INSERT INTO listas (id, descricao,dataInclusao) VALUES (?,?,?)", [1,'LISTA 1', '23/10/2015'])
 
-        /*$cordovaSQLite.execute(db, "INSERT INTO listas (id, descricao,dataInclusao) VALUES (1,'LISTA 1', '23/10/2015')");
-        $cordovaSQLite.execute(db, "INSERT INTO listas (id, descricao,dataInclusao) VALUES (2,'LISTA 2', '23/10/2015')");
-        $cordovaSQLite.execute(db, "INSERT INTO listas (id, descricao,dataInclusao) VALUES (3,'LISTA 3', '23/10/2015')");
-        $cordovaSQLite.execute(db, "INSERT INTO listas (id, descricao,dataInclusao) VALUES (4,'LISTA 4', '23/10/2015')");*/
+        $cordovaSQLite.execute(self.db, "INSERT INTO listas (id, descricao,dataInclusao) VALUES (1,'LISTA 1', '23/10/2015')");
+        $cordovaSQLite.execute(self.db, "INSERT INTO listas (id, descricao,dataInclusao) VALUES (2,'LISTA 2', '23/10/2015')");
+        $cordovaSQLite.execute(self.db, "INSERT INTO listas (id, descricao,dataInclusao) VALUES (3,'LISTA 3', '23/10/2015')");
+        $cordovaSQLite.execute(self.db, "INSERT INTO listas (id, descricao,dataInclusao) VALUES (4,'LISTA 4', '23/10/2015')");
 
     };
 
-    var query = function(sql, bindings) {
+    self.query = function(sql, bindings) {
         bindings = typeof bindings !== 'undefined' ? bindings : [];
-        return $cordovaSQLite.execute(db, sql, bindings);
+        return $cordovaSQLite.execute(self.db, sql, bindings);
     };
 
-    var fetchAll = function(result) {
-        var output = [];
-        for (var i = 0; i < result.rows.length; i++) {
-            output.push(result.rows.item(i));
-        }
-        return output;
+    self.fetchAll = function (query, parameters) {
+      var deferred = $q.defer();
+      parameters = typeof parameters !== 'undefined' ? parameters : [];
+      self.executeSql(query, parameters).then(function (res) {
+          var items = [];
+          for (var i = 0; i < res.rows.length; i++) {
+              items.push(res.rows.item(i));
+          }
+          return deferred.resolve(items);
+      }, function (err) {
+          return deferred.reject(err);
+      });
+
+      return deferred.promise;
     };
 
-    var fetch = function(result) {
+    /*self.fetch = function(result) {
         return result.rows.item(0);
+    };*/
+
+    self.executeSql = function (query, parameters) {
+      //console.log(self.db);
+        return $cordovaSQLite.execute(self.db, query, parameters);
     };
 
-    return {
-        init: init,
-        query: query,
-        fetchAll: fetchAll,
-        fetch: fetch
-    };
+    return self;
 }])
 
-.factory('Listas',['$q', function(DB){
+.factory('Listas',['$q','DB', function($q, DB){
 
   var self = this;
 
   self.all = function() {
-    var out = [];
-    return DB.query("select * from listas")
-             .then(function(result){
-                      return DB.fetchAll(result);
-                    },
-                   function(error){
-                      throw error;
-                   });
-   //console.log(out);
+    var sql = "select * from listas";
+    //console.log(DB);
+    return $q.when(DB.fetchAll(sql))
   }
 
   /*
@@ -92,5 +95,5 @@ angular.module('minhalista.factories',[])
   }
  }*/
 
-  return self
-})
+  return self;
+}])

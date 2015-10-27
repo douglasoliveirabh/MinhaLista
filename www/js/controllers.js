@@ -45,7 +45,13 @@ angular.module('minhalista.controllers', [])
 
     $scope.listas = [];
 
-    $scope.listas =   Listas.all();
+    console.log(Listas.all());
+
+    var itens =   Listas.all().then(function(result){
+         $scope.listas = angular.copy(result);
+    });
+
+
 
 /*
     $cordovaSQLite.execute(db, "INSERT INTO lista (id, descricao,dataInclusao) VALUES (1,'LISTA 1', '23/10/2015')");
