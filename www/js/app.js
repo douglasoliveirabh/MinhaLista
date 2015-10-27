@@ -4,9 +4,10 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
 
-.run(function($ionicPlatform) {
+angular.module('minhalista', ['ionic','minhalista.constants','minhalista.controllers','minhalista.factories','ngCordova'])
+
+.run(function($ionicPlatform, $cordovaSQLite,DB) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -18,6 +19,24 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    DB.init();
+
+    /*
+    //$cordovaSQLite.openDB({ name: "minhalista.db", bgType: 1 })
+
+    if (window.cordova){
+      db = $cordovaSQLite.openDB("minhalista.db");
+    }
+    else {
+      db = window.openDatabase("minhalista.db", '1', 'minhaLista', 1024 * 1024 * 100);
+    }
+
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS lista (id integer primary key, descricao text, dataInclusao text)");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS lista (id integer primary key, listaId integer, descricao text, quantidade number, preco number, dataInclusao text, foreign key(listaId) REFERENCES Lista(id))");
+
+
+    alert('criou');*/
   });
 })
 

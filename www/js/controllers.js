@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('minhalista.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
@@ -41,15 +41,35 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('ListasCtrl', function($scope) {
-  $scope.listas = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+.controller('ListasCtrl', function($scope,  $cordovaSQLite, Listas) {
+
+    $scope.listas = [];
+
+    $scope.listas =   Listas.all();
+
+/*
+    $cordovaSQLite.execute(db, "INSERT INTO lista (id, descricao,dataInclusao) VALUES (1,'LISTA 1', '23/10/2015')");
+    $cordovaSQLite.execute(db, "INSERT INTO lista (id, descricao,dataInclusao) VALUES (2,'LISTA 2', '23/10/2015')");
+    $cordovaSQLite.execute(db, "INSERT INTO lista (id, descricao,dataInclusao) VALUES (3,'LISTA 3', '23/10/2015')");
+    $cordovaSQLite.execute(db, "INSERT INTO lista (id, descricao,dataInclusao) VALUES (4,'LISTA 4', '23/10/2015')");
+
+    var query = "SELECT * FROM Lista;";
+    $cordovaSQLite.execute(db, query).then(function(result) {
+      for(var i=0; i<result.rows.length; i++){
+       $scope.listas.push(result.rows[i]);
+      }
+    }, function (err) {
+
+        console.log(err);;
+    }); */
+
+    /*if(res.rows.length > 0) {
+       console.log("SELECTED -> " + res.rows.item(0).firstname + " " + res.rows.item(0).lastname);
+    } else {
+       console.log("No results found");
+    }*/
+
+
 })
 
 .controller('ItensListaCtrl', function($scope, $stateParams) {
